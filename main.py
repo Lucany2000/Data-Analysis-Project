@@ -1,4 +1,3 @@
-from cProfile import label
 import os
 from turtle import color
 from openpyxl import load_workbook, Workbook
@@ -67,4 +66,42 @@ def copies_avg_v_identify_correlation():
     axis[1,0].set_ylabel('copies') #labels the y axis
     plt.show() #displays subplots
 
-copies_avg_v_identify_correlation()
+#copies_avg_v_identify_correlation()
+
+def V_gene_usage():
+    Vg_copies = {} #empty dictionary for v_genes weighted by copies
+    Vg_clones = {} #empty dictionary for v_genes weighted by donors
+    for tsv in tsv_library: #takes every tsv file from the folder
+        df = tsv_library[tsv] #shortcut to access the tsv file dataframe
+        Vg = set(df.v_gene) #stores all v_gene names in a set: a list that doesn't contain any duplicates
+        #gets the total number of copies per v_gene and stores in a dictionary with the v_gene as they key
+        Vg_copies[tsv] = {copy : sum(df.loc[df['v_gene'] == copy]['copies'].values) for copy in Vg}
+        #gets the total number of times that a v_gene appears within the donor with the v_gene as the key
+        Vg_clones[tsv] = {clone : df['v_gene'].value_counts()[clone] for clone in Vg}
+    for tsv in Vg_copies: #both Vg_clones and Vg_copies are always equal in contents and keys
+        figure, (ax1, ax2) = plt.subplots(1,2) #creates a subplot for 2 pie charts
+        figure.suptitle(tsv) #adds title to subplot
+        #sorts their dictionaries by largest number
+        cl = dict(sorted(Vg_clones[tsv].items(),key= lambda x:x[1]))
+        co = dict(sorted(Vg_copies[tsv].items(),key= lambda x:x[1]))
+        #combines any v_gene that takes up less than 1% of the total and stores it in "other"   
+        temp = {x:co[x] for x in co if co[x]/sum(co.values())*100 < 1}
+        for v in temp.keys():
+            co.pop(v)
+        co["other"] = round(sum(temp.values()))
+        temp = {x:cl[x] for x in cl if cl[x]/sum(cl.values())*100 < 1}
+        for v in temp.keys():
+            cl.pop(v)
+        cl["other"] = round(sum(temp.values()))
+        #pie charts that show the how much of a percentage each v_gene takes up
+        ax1.pie(cl.values(), labels=cl.keys(), autopct='%1.1f%%', textprops={'size': 'x-small'}, 
+                wedgeprops={'linewidth': 3.0, 'edgecolor': 'white'})
+        #sets name for pie charts        
+        ax1.set_title("V-genes : clones")        
+        ax2.pie(co.values(), labels=co.keys(), autopct='%1.1f%%', textprops={'size': 'x-small'}, 
+                wedgeprops={'linewidth': 3.0, 'edgecolor': 'white'})
+        ax2.set_title("V-genes : copies")
+        #displays subplot that has pie charts                
+        plt.show()
+
+V_gene_usage()    
