@@ -104,4 +104,61 @@ def V_gene_usage():
         #displays subplot that has pie charts                
         plt.show()
 
-V_gene_usage()    
+#V_gene_usage()    
+
+def controls_v_diabetes():
+    tsv_library2 = {} #creates a dict
+    for tsv in tsv_library:
+        df = tsv_library[tsv] #contents of tsv file
+        #stores each tsv file in dictionary and each tsv file is filtered per the specifics
+        tsv_library2[tsv] = {'j_genes': {j : df['j_gene'].value_counts()[j] for j in set(df.j_gene)},
+        'uniques': {uni : sum(df.loc[df['j_gene']==uni]['uniques'].values) for uni in set(df.j_gene)}}
+    for chart in range(2):
+        if chart == 0:
+            #creates a subplots for "Number of J_genes per donor"
+            figure, axis = plt.subplots(2,3) #creates rows and columns
+            figure.tight_layout(h_pad=2) #spreads out the subplots
+            col = 0 #columns
+            row = 0 #rows
+            for tsv in tsv_library2:
+                #creates bar chart using the dictionary keys as the x-axis and the values as the y-axis
+                axis[row, col].bar(tsv_library2[tsv]['j_genes'].keys(),tsv_library2[tsv]['j_genes'].values())
+                axis[row, col].set_title(tsv) #sets the title for the subplot
+                #adjusts the x-axis font size, angle, position for each subplot 
+                labels = axis[row, col].get_xticklabels()
+                plt.setp(labels, rotation = 45, horizontalalignment = 'right', fontsize = '7')
+                #shortcut for plotting all the subplots
+                if col <= 1:
+                    col += 1
+                else:
+                    row += 1 
+                    col = 0
+            axis[1,0].set_xlabel('j_genes') #labels the x axis
+            axis[1,0].set_ylabel('number of appearances') #labels the y axis
+            # figure.suptitle("Number of J_genes per donor")
+            plt.show() #displays subplots         
+        elif chart == 1:
+            #creates subplot for the total number of uniques of each J_genes            
+            figure, axis = plt.subplots(2,3) #creates rows and columns
+            figure.tight_layout(h_pad=2) #spreads out the subplots
+            col = 0 #columns
+            row = 0 #rows
+            for tsv in tsv_library2:
+                #creates bar chart using the dictionary keys as the x-axis and the values as the y-axis
+                axis[row, col].bar(tsv_library2[tsv]['uniques'].keys(),tsv_library2[tsv]['uniques'].values())
+                axis[row, col].set_title(tsv) #sets the title for the subplot
+                #adjusts the x-axis font size, angle, position for each subplot 
+                labels = axis[row, col].get_xticklabels()
+                plt.setp(labels, rotation = 45, horizontalalignment = 'right', fontsize = '7')
+                #shortcut for plotting all the subplots
+                if col <= 1:
+                    col += 1
+                else:
+                    row += 1
+                    col = 0
+            axis[1,0].set_xlabel('j_genes') #labels the x axis
+            axis[1,0].set_ylabel('number of appearances') #labels the y axis
+            # figure.suptitle("Number of uniques per J_genes")
+            plt.show() #displays subplotss            
+
+controls_v_diabetes()
