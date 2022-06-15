@@ -6,12 +6,14 @@ Questions
 When a clone undergoes expansion in the presence of antigen, it usually also undergoes mutation.  For each clone we have two fields avg_v_identity and copies.  The former gives the fraction of nucleotide bases in the clone that match the germline (e.g. 1 - mutation) and the latter the number of reads that are associated with the clone, giving a rough measure of size.
 
 Given this, come up with a figure that one could use to see if there is a correlation between these two variables.  Next, statistically test the hypothesis that the two are related.
+
 2) Is V-gene usage uniform within and consistent between donors?
 During development, each B-cell undergoes V(D)J recombination that pseudo-randomly joins one V, one D, and one J gene to create part of the heavy-chain which goes on to encode a portion of the cell’s antibodies.  For this question we’ll focus on the V-gene which is annotated by the v_gene column.
 
 Does it appear that within each donor V-genes are evenly distributed amongst clones?  How would you visualize this?  What happens when you look at V-gene usage weighted by copies?
 
 Across donors, does it appear that there is a pattern of V-gene usage (i.e. do most donors use the same V-genes) or is each donor different?  How would you visualize this?
+
 3) Does disease affect the clonal repertoire?
 In this final task, we introduce one additional piece of information.  HPAP001, HPAP003, and HPAP004 are all healthy individuals whereas HPAP015, HPAP030, and HPAP031 have all been clinically diagnosed with type 1 diabetes.
 
