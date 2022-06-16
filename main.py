@@ -46,6 +46,7 @@ def copies_avg_v_identify_correlation():
         #0: no correlation
         print(f"{tsv}:",round(cor,2))
     figure, axis = plt.subplots(2,3) #creates subplots
+    figure.tight_layout(h_pad=2) #spreads out the subplots
     col = 0 #columns
     row = 0 #rows
     for tsv in tsv_library: 
@@ -66,7 +67,7 @@ def copies_avg_v_identify_correlation():
     axis[1,0].set_ylabel('copies') #labels the y axis
     plt.show() #displays subplots
 
-#copies_avg_v_identify_correlation()
+# copies_avg_v_identify_correlation()
 
 def V_gene_usage():
     Vg_copies = {} #empty dictionary for v_genes weighted by copies
@@ -104,7 +105,7 @@ def V_gene_usage():
         #displays subplot that has pie charts                
         plt.show()
 
-#V_gene_usage()    
+# V_gene_usage()    
 
 def controls_v_diabetes():
     tsv_library2 = {} #creates a dict
